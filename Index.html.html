@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybersecurity Governance Diagnostic™ | CCC Consultancy Group</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+:root{
+  --navy:#0A1A2F;--navy-m:#112644;--navy-l:#1a3a5c;
+  --teal:#1FBFD7;--teal-lt:#e8f8fb;--teal-dk:#158fa3;
+  --white:#FFFFFF;--off:#F7F8FA;--grey:#F2F2F2;--grey-m:#E2E6EC;
+  --char:#222222;--mid:#4A5568;--muted:#718096;--border:#DDE3EC;
+  --green:#2D9B60;--amber:#C97A1A;--red:#C0392B;
+  --sh:0 4px 32px rgba(10,26,47,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-height:100vh;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+
+/* PAGES */
+.pg{display:none;animation:fu .3s ease;}
+.pg.active{display:block;}
+@keyframes fu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.shell{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem 1.25rem 5rem;}
+.card{background:var(--white);border-radius:16px;box-shadow:var(--sh);width:100%;max-width:700px;overflow:hidden;}
+
+/* LOGO */
+.logo-blk{display:flex;flex-direction:column;align-items:center;padding:2.5rem 2.5rem 1.75rem;border-bottom:1px solid var(--grey-m);}
+.logo-img{width:54px;height:54px;object-fit:contain;margin-bottom:10px;}
+.logo-nm{font-size:14px;font-weight:600;color:var(--navy);text-align:center;}
+.logo-sb{font-size:12px;color:var(--muted);text-align:center;margin-top:3px;letter-spacing:.03em;}
+.logo-sm .logo-img{width:36px;height:36px;margin-bottom:6px;}
+.logo-sm .logo-nm{font-size:12px;}
+
+/* BODY PAD */
+.bp{padding:2.5rem 3rem 3rem;}
+
+/* TYPOGRAPHY */
+.tool-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:400;color:var(--navy);line-height:1.25;text-align:center;margin-bottom:.5rem;}
+.tool-title sup{font-size:.5em;vertical-align:super;font-family:'Inter',sans-serif;font-weight:600;}
+.byline{font-size:13.5px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:2.5rem;}
+.sec-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);margin-bottom:.85rem;}
+
+/* EXPECT LIST */
+.ex-list{list-style:none;margin-bottom:2.25rem;}
+.ex-list li{display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid var(--grey);font-size:14px;color:var(--char);line-height:1.5;}
+.ex-list li:last-child{border-bottom:none;}
+.ex-list li strong{font-weight:600;color:var(--navy);}
+.e-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--teal);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+
+/* THEME PILLS */
+.th-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:2.5rem;}
+.th-pill{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--navy);font-weight:500;background:var(--white);}
+.t-num{flex-shrink:0;width:20px;height:20px;border-radius:4px;background:var(--teal-lt);color:var(--teal);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid rgba(31,191,215,.3);}
+
+/* BUTTONS */
+.btn-begin{display:block;width:100%;padding:15px;background:var(--navy);color:var(--white);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:10px;cursor:pointer;transition:background .2s,transform .15s;margin-bottom:1.25rem;}
+.btn-begin:hover{background:var(--navy-l);transform:translateY(-1px);}
+.btn-ghost{padding:11px 22px;border:1.5px solid var(--border);border-radius:8px;background:transparent;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:var(--mid);cursor:pointer;transition:border-color .2s,color .2s;}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+.btn-solid{padding:11px 28px;border:none;border-radius:8px;background:var(--navy);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--white);cursor:pointer;transition:background .2s;}
+.btn-solid:hover{background:var(--navy-l);}
+.btn-teal{padding:11px 22px;background:var(--teal);color:var(--navy);font-family:'Inter',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;white-space:nowrap;transition:opacity .2s;}
+.btn-teal:hover{opacity:.88;}
+.btn-ow{padding:10px 22px;background:transparent;color:rgba(255,255,255,.68);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;border:1px solid rgba(255,255,255,.22);border-radius:8px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn-ow:hover{border-color:rgba(255,255,255,.5);color:white;}
+
+/* DISCLAIMER */
+.disc{text-align:center;font-size:12px;color:var(--muted);font-style:italic;line-height:1.6;}
+.method-note{text-align:center;font-size:11.5px;color:var(--muted);margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--grey-m);line-height:1.65;}
+
+/* FORM */
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.f-grp{margin-bottom:1.25rem;}
+.f-lbl{display:block;font-size:11.5px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.f-inp,.f-sel{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;color:var(--char);background:var(--white);outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
+.f-inp:focus,.f-sel:focus{border-color:var(--teal);}
+.f-inp::placeholder{color:var(--muted);}
+.sel-w{position:relative;}
+.sel-w::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--muted);pointer-events:none;}
+.row-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;}
+
+/* PROGRESS */
+.prog-w{padding:1.75rem 3rem 0;}
+.prog-t{height:3px;background:var(--grey-m);border-radius:2px;margin-bottom:1rem;overflow:hidden;}
+.prog-f{height:100%;background:var(--teal);border-radius:2px;transition:width .4s ease;}
+.prog-m{display:flex;justify-content:space-between;margin-bottom:2rem;}
+.prog-dn{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);}
+.prog-st{font-size:12px;color:var(--muted);}
+
+/* DOMAIN */
+.dom-w{padding:0 3rem 3rem;}
+.d-hdr{display:flex;align-items:center;gap:13px;margin-bottom:.75rem;}
+.d-ico{width:44px;height:44px;background:var(--navy);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.d-ttl{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:400;color:var(--navy);}
+.d-desc{font-size:13px;color:var(--muted);margin-bottom:2rem;line-height:1.6;padding-bottom:1.5rem;border-bottom:1px solid var(--grey-m);}
+.q-blk{margin-bottom:1.75rem;}
+.q-lbl{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:6px;}
+.q-txt{font-size:14.5px;font-weight:500;color:var(--char);margin-bottom:12px;line-height:1.5;}
+.q-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.q-opt{padding:11px 8px;border:1.5px solid var(--border);border-radius:8px;background:var(--white);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;color:var(--mid);cursor:pointer;text-align:center;transition:all .15s;line-height:1.35;}
+.q-opt:hover{border-color:var(--teal);background:var(--teal-lt);color:var(--navy);}
+.q-opt .sub{font-size:10.5px;font-weight:400;opacity:.75;display:block;margin-top:2px;}
+.sy{border-color:var(--green)!important;background:#edf7f2!important;color:var(--green)!important;}
+.sp{border-color:var(--amber)!important;background:#fdf4e7!important;color:var(--amber)!important;}
+.sn{border-color:var(--red)!important;background:#fdf1f0!important;color:var(--red)!important;}
+.q-div{height:1px;background:var(--grey);margin:1.75rem 0;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--grey-m);}
+
+/* RESULTS */
+.res-w{padding:2.5rem 3rem 3rem;}
+.res-hdr{text-align:center;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--grey-m);}
+.res-tag{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);border:1px solid rgba(31,191,215,.4);background:var(--teal-lt);padding:4px 14px;border-radius:20px;margin-bottom:1rem;}
+.res-ttl{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:400;color:var(--navy);margin-bottom:.35rem;}
+.res-org{font-size:13px;color:var(--muted);}
+
+/* SCORE BOX */
+.sc-box{display:flex;align-items:center;gap:2rem;background:var(--navy);border-radius:12px;padding:1.75rem 2rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.ring-svg{display:block;flex-shrink:0;}
+.ring-pct{font-size:26px;font-weight:600;fill:#1FBFD7;dominant-baseline:middle;text-anchor:middle;}
+.ring-sub{font-size:9px;fill:rgba(255,255,255,.45);dominant-baseline:middle;text-anchor:middle;text-transform:uppercase;letter-spacing:1.2px;}
+.sc-meta{color:white;}
+.mat-bdg{display:inline-block;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px;}
+.sc-meta h3{font-size:1.05rem;font-weight:600;margin-bottom:5px;}
+.sc-meta p{font-size:13px;color:rgba(255,255,255,.62);line-height:1.6;max-width:290px;}
+
+/* SECTION LABELS */
+.r-sec{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--navy);margin:2rem 0 1rem;padding-bottom:8px;border-bottom:2px solid var(--teal-lt);}
+
+/* DOMAIN SCORE CARDS */
+.ds-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ds-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;}
+.ds-nm{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.bar-t{height:6px;background:var(--grey-m);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.bar-f{height:100%;border-radius:3px;transition:width 1.2s ease;}
+.ds-pct{font-size:18px;font-weight:600;color:var(--navy);}
+.ds-lvl{font-size:11px;color:var(--muted);margin-left:6px;}
+
+/* CHART */
+.chart-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.75rem;}
+
+/* GAP TABLE */
+.gap-w{border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.gap-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.gap-tbl th{background:var(--navy);color:white;padding:10px 14px;font-size:11px;font-weight:600;text-align:left;text-transform:uppercase;letter-spacing:.06em;}
+.gap-tbl td{padding:11px 14px;border-bottom:1px solid var(--grey-m);vertical-align:top;line-height:1.5;}
+.gap-tbl tr:last-child td{border-bottom:none;}
+.gap-tbl tr:nth-child(even) td{background:var(--off);}
+.pt{display:inline-block;padding:3px 10px;border-radius:4px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.pt-c{background:#fde8e8;color:var(--red);}
+.pt-h{background:#fef3e0;color:var(--amber);}
+.pt-m{background:#edf7f2;color:var(--green);}
+
+/* ACTION CARDS */
+.ac-card{background:var(--white);border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:0 8px 8px 0;padding:1.25rem 1.5rem;margin-bottom:12px;}
+.ac-card.c{border-left-color:var(--red);}
+.ac-card.h{border-left-color:var(--amber);}
+.ac-card.m{border-left-color:var(--green);}
+.ac-hd{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.ac-dom{font-size:12px;font-weight:600;color:var(--navy);flex:1;}
+.ac-time{font-size:11px;background:var(--grey);color:var(--char);padding:3px 10px;border-radius:4px;font-weight:500;white-space:nowrap;}
+.ac-q{font-size:13.5px;font-weight:600;color:var(--char);margin-bottom:8px;}
+.ac-body{font-size:13px;color:var(--mid);line-height:1.65;}
+.ac-body ul{margin:8px 0 0 16px;}
+.ac-body li{margin-bottom:5px;}
+.ac-stds{margin-top:10px;padding-top:8px;border-top:1px dashed var(--grey-m);}
+.ac-stds-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:4px;}
+.std-tag{display:inline-block;background:var(--navy);color:var(--teal);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;margin:2px 3px 2px 0;}
+
+/* EXEC SUMMARY */
+.exec-summ{display:none;}
+
+/* CTA BOX */
+.cta-box{background:var(--navy);border-radius:12px;padding:2rem 2.25rem;margin-top:2rem;}
+.cta-inner{display:flex;align-items:flex-start;gap:2rem;flex-wrap:wrap;}
+.cta-t{flex:1;min-width:180px;}
+.cta-ey{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:5px;}
+.cta-ttl{font-size:1.05rem;font-weight:600;color:white;margin-bottom:6px;}
+.cta-bd{font-size:13px;color:rgba(255,255,255,.63);line-height:1.6;margin-bottom:1.25rem;}
+.cta-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-call{padding:12px 22px;background:var(--teal);color:var(--navy);font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;border:none;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s;}
+.btn-call:hover{opacity:.88;}
+.btn-email-cta{padding:11px 20px;background:transparent;color:rgba(255,255,255,.78);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;border:1.5px solid rgba(255,255,255,.3);border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s;}
+.btn-email-cta:hover{border-color:rgba(255,255,255,.6);color:white;}
+
+/* DOWNLOAD BAR */
+.dl-bar{background:var(--grey);border-radius:10px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;border:1px solid var(--border);}
+.dl-bar p{font-size:13px;color:var(--mid);}
+.dl-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-dl{padding:10px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-dl-exec{background:var(--navy);color:white;}
+.btn-dl-exec:hover{background:var(--navy-l);}
+.btn-dl-full{background:white;color:var(--navy);border:1.5px solid var(--border);}
+.btn-dl-full:hover{border-color:var(--navy);}
+.btn-restart{background:transparent;color:var(--mid);border:1.5px solid var(--border);padding:10px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.btn-restart:hover{border-color:var(--navy);color:var(--navy);}
+
+/* FOOTER */
+.rpt-ftr{text-align:center;margin-top:2rem;padding-top:2rem;border-top:1px solid var(--grey-m);font-size:11.5px;color:var(--muted);line-height:1.8;}
+
+/* FEEDBACK BUTTON */
+.fb-btn{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--navy);color:white;border:none;border-radius:50px;padding:10px 18px 10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(10,26,47,.25);transition:all .2s;text-decoration:none;}
+.fb-btn:hover{background:var(--navy-l);transform:translateY(-2px);}
+.fb-ico{width:20px;height:20px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* EXEC SUMMARY PRINT STYLES */
+.exec-print-only{display:none;}
+
+/* PRINT */
+@media print{
+  body{background:white;}
+  .fb-btn,.dl-bar,.cta-box,.nav-row,.row-nav,.pg-landing,.pg-form,.pg-domain{display:none!important;}
+  .pg-results.active{display:block!important;}
+  .card{box-shadow:none!important;border-radius:0!important;max-width:100%!important;}
+  .shell{padding:0!important;min-height:auto!important;}
+  body[data-print="exec"] .full-report{display:none!important;}
+  body[data-print="exec"] .exec-summ{display:block!important;}
+  body[data-print="full"] .exec-summ{display:none!important;}
+  body[data-print="full"] .full-report{display:block!important;}
+  .exec-summ{page-break-after:always;}
+  .ac-card{break-inside:avoid;}
+}
+
+@media(max-width:560px){
+  .bp,.res-w,.dom-w{padding-left:1.5rem;padding-right:1.5rem;}
+  .prog-w{padding-left:1.5rem;padding-right:1.5rem;}
+  .f-row{grid-template-columns:1fr;}
+  .th-grid{grid-template-columns:1fr;}
+  .ds-grid{grid-template-columns:1fr;}
+  .tool-title{font-size:1.65rem;}
+  .sc-box{flex-direction:column;gap:1.25rem;}
+  .cta-inner{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- FEEDBACK BUTTON -->
+<a class="fb-btn" href="mailto:info@cccgrp.com?subject=Feedback%3A%20Cybersecurity%20Governance%20Diagnostic&body=Hello%20CCC%20Team%2C%0A%0AThank%20you%20for%20the%20Cybersecurity%20Governance%20Diagnostic%20tool.%0A%0AMy%20feedback%3A%0A%0A[Please%20share%20your%20thoughts%20here]%0A%0AOrganisation%3A%0ARole%3A%0A%0AThank%20you." target="_blank">
+  <div class="fb-ico">
+    <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 1h10v8H6.5L3 11V9H1V1z" stroke="white" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </div>
+  Share Feedback
+</a>
+
+<!-- ═══════════════════════ LANDING ═══════════════════════ -->
+<div class="pg pg-landing active" id="pg-landing">
+<div class="shell"><div class="card">
+  <div class="logo-blk">
+    <img src="https://ccc-consultancy.github.io/governance-diagnostic/logo.png" alt="CCC Consultancy Group" class="logo-img"
+      onerror="this.style.display='none';document.getElementById('logo-fb-l').style.display='flex';">
+    <div id="logo-fb-l" style="display:none;width:54px;height:54px;border-radius:10px;background:var(--navy);align-items:center;justify-content:center;margin-bottom:10px;"><span style="color:var(--teal);font-size:15px;font-weight:700;">CCC</span></div>
+    <div class="logo-nm">CCC Consultancy Group Ltd</div>
+    <div class="logo-sb">Advisory Diagnostic Tool</div>
+  </div>
+  <div class="bp">
+    <h1 class="tool-title">Cybersecurity Governance<br>Diagnostic<sup>™</sup></h1>
+    <p class="byline">A structured, scenario-based assessment of your organisation's cybersecurity governance maturity across six critical dimensions — informed by international best practice and leading regulatory frameworks.</p>
+    <div class="sec-lbl">What to Expect</div>
+    <ul class="ex-list">
+      <li><span class="e-num">30</span><span><strong>diagnostic questions</strong> — five per cybersecurity theme</span></li>
+      <li><span class="e-num">3</span><span><strong>response options per question</strong> — select the statement that best reflects how your organisation operates today, not how it aspires to be</span></li>
+      <li><span class="e-num">✓</span><span><strong>Instant maturity results</strong> — domain scores, radar analysis, a detailed gap analysis and a prioritised action plan with industry standards</span></li>
+      <li><span class="e-num">↓</span><span><strong>Two downloadable reports</strong> — an Executive Summary and a Full Diagnostic Report, both print-ready</span></li>
+      <li><span class="e-num">~</span><span><strong>Approximately 10–15 minutes</strong> to complete. Your progress is saved automatically.</span></li>
+    </ul>
+    <div class="sec-lbl">Six cybersecurity dimensions assessed</div>
+    <div class="th-grid">
+      <div class="th-pill"><div class="t-num">1</div>Cybersecurity Governance</div>
+      <div class="th-pill"><div class="t-num">2</div>Risk Management</div>
+      <div class="th-pill"><div class="t-num">3</div>Technology Safeguards</div>
+      <div class="th-pill"><div class="t-num">4</div>Third-Party Risk Controls</div>
+      <div class="th-pill"><div class="t-num">5</div>Incident Response</div>
+      <div class="th-pill"><div class="t-num">6</div>Operational Resilience</div>
+    </div>
+    <button class="btn-begin" onclick="goTo('pg-form')">Begin Diagnostic</button>
+    <p class="disc">Accurate responses produce more useful results. Answer as your organisation operates today, not as it aspires to be.</p>
+    <p class="method-note">This diagnostic is informed by leading regulatory cybersecurity frameworks including the CBN Cybersecurity Self-Assessment Tool (CSAT), ISO/IEC 27001:2022, NIST Cybersecurity Framework 2.0, CIS Controls v8, DORA, and ISO 22301. It is applicable to organisations of all sizes and sectors.</p>
+  </div>
+</div></div>
+</div>
+
+<!-- ═══════════════════════ FORM ═══════════════════════════ -->
+<div class="pg pg-form" id="pg-form">
+<div class="shell"><div class="card">
+  <div class="logo-blk logo-sm">
+    <img src="https://ccc-consultancy.github.io/governance-diagnostic/logo.png" alt="CCC" class="logo-img" onerror="this.style.display='none';">
+    <div class="logo-nm">CCC Consultancy Group Ltd</div>
+    <div class="logo-sb">Advisory Diagnostic Tool</div>
+  </div>
+  <div class="bp">
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400;color:var(--navy);margin-bottom:.35rem;">About your organisation</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:2rem;line-height:1.55;">This information contextualises your results. All processing happens locally in your browser — nothing is stored externally.</p>
+    <div class="f-row">
+      <div class="f-grp"><label class="f-lbl">Organisation Name</label><input type="text" class="f-inp" id="org-name" placeholder="e.g. Aethis Limited"></div>
+      <div class="f-grp"><label class="f-lbl">Sector</label><div class="sel-w"><select class="f-sel" id="org-sector"><option value="">Select sector...</option><option>Financial Services / Banking</option><option>Fintech / Payments</option><option>Insurance</option><option>Healthcare</option><option>Retail / E-commerce</option><option>Technology</option><option>Manufacturing</option><option>Government / Public Sector</option><option>NGO / Non-profit</option><option>Other</option></select></div></div>
+    </div>
+    <div class="f-row">
+      <div class="f-grp"><label class="f-lbl">Organisation Size</label><div class="sel-w"><select class="f-sel" id="org-size"><option value="">Select size...</option><option>Micro (1–10)</option><option>Small (11–50)</option><option>Medium (51–250)</option><option>Large (251–1,000)</option><option>Enterprise (1,000+)</option></select></div></div>
+      <div class="f-grp"><label class="f-lbl">Assessment Date</label><input type="date" class="f-inp" id="org-date"></div>
+    </div>
+    <div class="f-grp"><label class="f-lbl">Completed By</label><input type="text" class="f-inp" id="org-contact" placeholder="Name and role — e.g. Jane Doe, Head of Compliance"></div>
+    <div class="row-nav">
+      <button class="btn-ghost" onclick="goTo('pg-landing')">&larr; Back</button>
+      <button class="btn-solid" onclick="startAssessment()">Start Assessment &rarr;</button>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<!-- ═══════════════════════ DOMAIN ══════════════════════════ -->
+<div class="pg pg-domain" id="pg-domain">
+<div class="shell"><div class="card">
+  <div class="logo-blk logo-sm">
+    <img src="https://ccc-consultancy.github.io/governance-diagnostic/logo.png" alt="CCC" class="logo-img" onerror="this.style.display='none';">
+    <div class="logo-nm">CCC Consultancy Group Ltd</div>
+  </div>
+  <div class="prog-w">
+    <div class="prog-t"><div class="prog-f" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-m"><div class="prog-dn" id="prog-nm"></div><div class="prog-st" id="prog-st"></div></div>
+  </div>
+  <div class="dom-w" id="dom-content"></div>
+</div></div>
+</div>
+
+<!-- ═══════════════════════ RESULTS ═════════════════════════ -->
+<div class="pg pg-results" id="pg-results">
+<div class="shell"><div class="card">
+  <div class="logo-blk">
+    <img src="https://ccc-consultancy.github.io/governance-diagnostic/logo.png" alt="CCC Consultancy Group" class="logo-img" onerror="this.style.display='none';">
+    <div class="logo-nm">CCC Consultancy Group Ltd</div>
+    <div class="logo-sb">Advisory Diagnostic Tool</div>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY (print only when exec mode) -->
+  <div class="exec-summ" id="exec-summ-section">
+    <div style="padding:2.5rem 3rem 3rem;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--navy);">
+        <div>
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:6px;">Executive Summary</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:var(--navy);line-height:1.2;">Cybersecurity Governance<br>Diagnostic Report</h2>
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--muted);line-height:1.8;" id="exec-meta"></div>
+      </div>
+      <div id="exec-narrative" style="font-size:14px;color:var(--char);line-height:1.75;margin-bottom:2rem;"></div>
+      <div id="exec-scores-table" style="margin-bottom:2rem;"></div>
+      <div id="exec-top-gaps" style="margin-bottom:2rem;"></div>
+      <div id="exec-immediate-actions" style="margin-bottom:2rem;"></div>
+      <div style="background:var(--grey);border-radius:8px;padding:1.25rem 1.5rem;margin-top:2rem;font-size:12px;color:var(--muted);line-height:1.7;">
+        <strong style="color:var(--navy);">Prepared by CCC Consultancy Group Ltd</strong><br>
+        This report was generated using the CCC Cybersecurity Governance Diagnostic™, an advisory tool informed by ISO/IEC 27001:2022, NIST CSF 2.0, CIS Controls v8, DORA, and the CBN Cybersecurity Self-Assessment Tool (CSAT). It is for diagnostic and governance purposes only and does not constitute legal, regulatory or professional advice.<br>
+        info@cccgrp.com &nbsp;|&nbsp; +44 7407 779 079 &nbsp;|&nbsp; cccgrp.com &nbsp;|&nbsp; UK expertise. Global perspective. Local impact.
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL REPORT -->
+  <div class="full-report" id="full-report-section">
+    <div class="res-w">
+      <div class="res-hdr">
+        <div class="res-tag">Assessment Complete</div>
+        <h2 class="res-ttl">Cybersecurity Governance Diagnostic</h2>
+        <div class="res-org" id="res-org"></div>
+      </div>
+
+      <div class="sc-box">
+        <svg class="ring-svg" width="116" height="116" viewBox="0 0 116 116">
+          <circle cx="58" cy="58" r="46" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="10"/>
+          <circle id="ring-arc" cx="58" cy="58" r="46" fill="none" stroke="#1FBFD7" stroke-width="10"
+            stroke-dasharray="289.03" stroke-dashoffset="289.03"
+            stroke-linecap="round" transform="rotate(-90 58 58)" style="transition:stroke-dashoffset 1.4s ease;"/>
+          <text class="ring-pct" x="58" y="55" id="ring-pct">0%</text>
+          <text class="ring-sub" x="58" y="70">Overall</text>
+        </svg>
+        <div class="sc-meta">
+          <div class="mat-bdg" id="mat-bdg"></div>
+          <h3 id="mat-ttl"></h3>
+          <p id="mat-desc"></p>
+        </div>
+      </div>
+
+      <div class="r-sec">Domain Scores</div>
+      <div class="ds-grid" id="ds-grid"></div>
+
+      <div class="r-sec" style="margin-top:1.75rem;">Maturity Radar — All Six Dimensions</div>
+      <div class="chart-card">
+        <canvas id="radar-chart" height="280"></canvas>
+      </div>
+
+      <div class="r-sec" style="margin-top:1.75rem;">Gap Analysis</div>
+      <div class="gap-w">
+        <table class="gap-tbl">
+          <thead><tr><th>Domain</th><th>Score</th><th>Maturity</th><th>Gap Summary</th><th>Priority</th></tr></thead>
+          <tbody id="gap-body"></tbody>
+        </table>
+      </div>
+
+      <div class="r-sec" style="margin-top:1.75rem;">Priority Action Plan</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;">Actions are shown only for areas where gaps were identified. Each recommendation references applicable international standards and best practice frameworks.</p>
+      <div id="action-plan"></div>
+
+      <!-- DOWNLOAD BAR -->
+      <div class="dl-bar">
+        <p>Download your diagnostic report in two formats — an Executive Summary for Board and leadership, or the Full Report for your compliance or IT team.</p>
+        <div class="dl-btns">
+          <button class="btn-dl btn-dl-exec" onclick="printMode('exec')">⬇ Executive Summary</button>
+          <button class="btn-dl btn-dl-full" onclick="printMode('full')">⬇ Full Report</button>
+          <button class="btn-restart" onclick="restartTool()">New Assessment</button>
+        </div>
+      </div>
+
+      <!-- CTA BOX -->
+      <div class="cta-box">
+        <div class="cta-inner">
+          <div class="cta-t">
+            <div class="cta-ey">Ready to close the gaps?</div>
+            <div class="cta-ttl">Work With CCC Consultancy Group</div>
+            <div class="cta-bd">Our GRC advisory team specialises in translating diagnostic findings into practical, Board-ready governance frameworks — across the UK, Nigeria and wider African markets. Book a free 15-minute discovery call or send us your report and we will be in touch.</div>
+            <div class="cta-btns">
+              <a class="btn-call" href="https://calendly.com/funsokale/free-15-minute-discovery-call-ccc-consultancy" target="_blank">📞 Request a Call</a>
+              <a class="btn-email-cta" id="email-cta-link" href="#" target="_blank">✉ Email Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rpt-ftr">
+        This tool is for diagnostic and governance purposes only. It does not constitute legal, regulatory, or professional advice.<br>
+        <strong style="color:var(--navy);">CCC Consultancy Group Ltd</strong> &mdash; info@cccgrp.com &mdash; UK expertise. Global perspective. Local impact.<br>
+        &copy; 2026 All rights reserved.
+      </div>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════ */
+const DOMAINS=[
+{id:1,icon:'🏛️',name:'Cybersecurity Governance',
+ desc:'Evaluates whether cybersecurity is embedded at Board and executive level, with clear ownership, documented accountability and dedicated resource allocation.',
+ q:['Does your organisation have a Board-approved Cybersecurity Policy in place?',
+    'Is there a designated cybersecurity lead (e.g. CISO or Head of IT Security) with defined authority and a clear reporting line?',
+    'Are cybersecurity risks formally reported to senior leadership or the Board at least quarterly?',
+    'Are cybersecurity roles, responsibilities and accountabilities formally documented and communicated to all relevant staff?',
+    'Is there a dedicated cybersecurity budget reviewed and approved by leadership on an annual basis?']},
+{id:2,icon:'⚖️',name:'Risk Management Practices',
+ desc:'Evaluates how cyber risk is identified, assessed, documented and actively managed within the enterprise risk framework.',
+ q:['Is there a formal cyber risk assessment process conducted at least annually or following significant operational changes?',
+    'Are cyber risks documented in the enterprise risk register with assigned owners and defined review cycles?',
+    'Has your organisation defined a risk appetite or tolerance statement specifically for cybersecurity risk?',
+    'Is there a process to monitor and track emerging cyber threats relevant to your sector and operating environment?',
+    'Are residual cyber risks formally reviewed and escalated to leadership on a regular basis?']},
+{id:3,icon:'🔒',name:'Technology Infrastructure Safeguards',
+ desc:'Reviews the technical controls protecting systems, data and digital assets from unauthorised access, compromise and disruption.',
+ q:['Does your organisation maintain a complete, up-to-date inventory of all hardware and software assets?',
+    'Are access controls enforced using the principle of least privilege, with periodic access reviews conducted?',
+    'Is multi-factor authentication (MFA) deployed across critical systems and all remote access connections?',
+    'Is sensitive and regulated data encrypted both at rest and in transit across your systems?',
+    'Are systems, applications and devices patched and updated on a defined and enforced schedule?']},
+{id:4,icon:'🤝',name:'Third-Party Risk Controls',
+ desc:"Examines how vendor, supplier and cloud provider cyber risks are identified, assessed and managed across the organisation's extended supply chain.",
+ q:['Is there a documented process for assessing the cybersecurity posture of third-party vendors before engagement?',
+    'Are critical or high-risk third parties subject to formal cybersecurity due diligence prior to onboarding?',
+    'Do vendor and supplier contracts include cybersecurity obligations, data protection clauses and audit rights?',
+    'Is there ongoing monitoring of third-party access privileges and their evolving cyber risk exposure?',
+    'Are cloud service providers and SaaS platforms included in your third-party risk review and management process?']},
+{id:5,icon:'🚨',name:'Incident Response Capabilities',
+ desc:"Assesses the organisation's preparedness to detect, contain, respond to and learn from cybersecurity incidents in a structured and timely manner.",
+ q:['Does your organisation have a formally documented Incident Response Plan (IRP) approved by leadership?',
+    'Has the Incident Response Plan been tested — for example through a tabletop exercise — within the past 12 months?',
+    'Are all relevant staff trained on their specific roles and responsibilities in the event of a cyber incident?',
+    'Is there a clearly defined escalation and regulatory notification process for cyber incidents?',
+    'Are cyber incidents formally logged, root-cause reviewed and used to improve controls and detection capabilities?']},
+{id:6,icon:'🔄',name:'Operational Resilience',
+ desc:"Evaluates the organisation's ability to maintain, absorb disruption to, and rapidly restore critical operations following a cyber event.",
+ q:["Does your organisation have a Business Continuity Plan (BCP) that specifically addresses cyber disruption scenarios?",
+    'Is there a Disaster Recovery Plan (DRP) with defined and tested Recovery Time Objectives (RTOs) and Recovery Point Objectives (RPOs)?',
+    'Are critical systems and data backed up on a regular, tested schedule with documented recovery outcomes?',
+    'Is redundancy built into key systems and critical digital infrastructure to reduce single points of failure?',
+    'Has your organisation conducted a formal cyber resilience exercise or simulation within the past 12 months?']}
+];
+
+const MAT=[
+ {min:0, max:39, label:'Initial',    title:'Ad Hoc — Significant Gaps Identified',       desc:'Cybersecurity controls are largely absent or undocumented. Immediate and structured remediation is required across multiple domains.',    col:'#C0392B',bg:'#fde8e8'},
+ {min:40,max:59, label:'Developing', title:'Developing — Material Gaps Remain',           desc:'Some controls exist but are inconsistently applied. A structured programme of improvement is needed to achieve regulatory baseline.',      col:'#C97A1A',bg:'#fef3e0'},
+ {min:60,max:74, label:'Defined',    title:'Defined — Foundational Controls Present',     desc:'Core controls are documented and broadly applied. Targeted enhancements are needed to reach a fully managed and evidenced state.',        col:'#B8860B',bg:'#fef9e0'},
+ {min:75,max:89, label:'Managed',    title:'Managed — Controls Are Embedded',             desc:'Cybersecurity is consistently managed with clear ownership and governance. Focus on continuous monitoring and strategic optimisation.',      col:'#2D9B60',bg:'#edf7f2'},
+ {min:90,max:100,label:'Optimised',  title:'Optimised — Cyber Governance Best Practice',  desc:'Cybersecurity is deeply embedded in governance, culture and operations. Continue to evolve and adapt as the threat landscape changes.',     col:'#1FBFD7',bg:'#e8f8fb'}
+];
+
+/* ── RICH RECOMMENDATIONS ─────────────────────────────── */
+const RECS={
+ 1:{
+  0:{q:'Board-Approved Cybersecurity Policy',
+     risk:'Without a Board-approved policy, cybersecurity lacks strategic authority. Regulatory bodies (FCA, CBN, ICO) increasingly require demonstrable tone from the top. In the absence of policy, regulatory censure, reputational harm and inconsistent control application are heightened.',
+     actions:['Draft a Cybersecurity Policy aligned to ISO/IEC 27001:2022 Annex A.5.1, covering scope, objectives, roles and responsibilities, risk appetite statement, data classification principles, compliance requirements and annual review cycle.','Ensure the policy explicitly references applicable regulatory obligations (BOFIA 2020, GDPR/Nigeria Data Protection Act, CBN CSAT requirements, FCA/PRA SYSC where applicable).','Establish a Board-level approval and review cycle — minimum annually and following material incidents or regulatory changes.','Cascade the policy through subsidiary policies covering acceptable use, access control, BYOD, remote working, and data handling.','Appoint a Policy Owner responsible for maintenance, enforcement and annual attestation by all staff.'],
+     stds:['ISO/IEC 27001:2022 Cl. 5.2','NIST CSF 2.0 GV.PO-01','CIS Controls v8 — Governance','CBN CSAT Domain 1']},
+  1:{q:'Designated Cybersecurity Lead',
+     risk:'Absence of a named cybersecurity lead creates accountability gaps. Regulatory expectations under the Senior Managers and Certification Regime (SMCR), CBN circular requirements, and NIS2 increasingly mandate named, accountable individuals for cyber oversight.',
+     actions:['Appoint a CISO or equivalent (Head of IT Security, Cyber Risk Officer) with a formal terms of reference, clear authority, and a direct reporting line to the CEO or Board Risk Committee.','Define the CISO Charter covering: authority to enforce controls, escalation rights, budget oversight, regulatory liaison responsibilities, and Board access.','For smaller organisations, consider a fractional or virtual CISO (vCISO) arrangement with a reputable specialist firm where an internal hire is not feasible.','Ensure the designated lead receives appropriate continuing professional development — CISM, CISSP, or sector-specific certifications.','Map the role to applicable regulatory frameworks and document the appointment formally in governance papers.'],
+     stds:['ISO/IEC 27001:2022 Cl. 5.3','NIST CSF 2.0 GV.RR-01','NIS2 Article 20','Senior Managers Regime (SMCR)']},
+  2:{q:'Quarterly Board Cyber Reporting',
+     risk:"Cyber risk cannot be governed from the IT department alone. Boards that lack regular, structured cyber reporting are unable to make informed decisions on risk appetite, investment, or escalation — a finding increasingly highlighted in FCA, PRA and CBN supervisory reviews.",
+     actions:['Establish a quarterly Board Cyber Risk Report covering: threat landscape summary, KRI dashboard (incidents, patching %, access anomalies, phishing rates), risk register movements, third-party incidents, control effectiveness updates, and regulatory developments.','Use a standardised RAG (Red/Amber/Green) dashboard format to enable trend tracking and appetite comparison over time.','Ensure reporting language is accessible to non-technical Board members — translate technical metrics into business impact and risk appetite language.','Include a forward-looking section covering upcoming regulatory deadlines, planned exercises, and strategic cyber investments.','Benchmark reporting against TCFD cyber risk guidance and NCSC Cyber Security Toolkit for Boards.'],
+     stds:['NIST CSF 2.0 GV.OC-01','BCBS Principles — Governance','NCSC Board Toolkit','ISO/IEC 27001:2022 Cl. 9.3']},
+  3:{q:'Documented Cybersecurity RACI',
+     risk:'Unclear roles create gaps in control execution and escalation. In regulatory investigations and audits, the absence of documented accountability is treated as a governance failure in its own right.',
+     actions:['Develop and publish a Cybersecurity RACI (Responsible, Accountable, Consulted, Informed) matrix covering all key cybersecurity activities: risk assessment, patching, access management, incident response, third-party oversight, training, and Board reporting.','Integrate the RACI into onboarding documentation, job descriptions and annual performance objectives for relevant roles.','Review the RACI at least annually and following organisational restructuring, mergers or significant system changes.','Ensure the RACI reflects the Three Lines of Defence model — distinguishing between operational ownership (1st line), risk oversight (2nd line), and independent assurance (3rd line/internal audit).','Conduct annual attestation by all named individuals confirming awareness and acceptance of their designated cybersecurity responsibilities.'],
+     stds:['ISO/IEC 27001:2022 Cl. 5.3','COBIT 2019 — EDM01','Three Lines of Defence Model','NIST CSF 2.0 GV.RR']},
+  4:{q:'Dedicated Cybersecurity Budget',
+     risk:'Under-investment in cybersecurity is one of the most consistent precursors to successful cyberattacks. Regulatory expectations are increasingly that cybersecurity investment is proportionate to the risk profile of the organisation.',
+     actions:['Conduct a cybersecurity resource gap analysis against current threats, regulatory requirements and the organisation\'s digital footprint.','Prepare a Board-level cybersecurity investment business case covering: people (FTEs, training, certifications), tools (SIEM, EDR, IAM, vulnerability scanning), services (penetration testing, incident response retainer, threat intelligence), and insurance.','Benchmark investment against industry guidance — Gartner recommends 5–10% of total IT budget; regulated financial institutions often exceed this.','Establish budget as a formal line item in annual financial planning, with CISO/CFO joint ownership and Board approval.','Include provision for regulatory compliance costs, cyber insurance premium, and post-incident recovery reserves.'],
+     stds:['ISO/IEC 27001:2022 Cl. 7.1','NIST CSF 2.0 GV.RM-06','Gartner Security Spending Benchmarks','CBN CSAT Domain 1']}
+ },
+ 2:{
+  0:{q:'Formal Cyber Risk Assessment Process',
+     risk:'Absence of a structured risk assessment means threats and vulnerabilities are unquantified, making it impossible to prioritise controls or demonstrate regulatory compliance. CBN CSAT, ISO 27001 and NIST CSF all treat risk assessment as a foundational requirement.',
+     actions:['Implement a structured cyber risk assessment methodology — OCTAVE Allegro, ISO/IEC 27005, or FAIR (Factor Analysis of Information Risk) — applied at least annually and after material changes.','Assess across four dimensions: threat actors and TTPs (using MITRE ATT&CK), vulnerability landscape (CVE/NVD, internal scans), asset criticality (crown jewels identification), and business impact (financial, operational, reputational, regulatory).','Document all identified risks with: risk description, likelihood score (1–5), impact score (1–5), inherent risk rating, treatment decision (accept/transfer/mitigate/avoid), control owner, and residual risk rating.','Ensure risk assessment outputs feed directly into the risk register, action plan and Board reporting.','Engage an independent third party to validate the assessment methodology and outputs at least every two years.'],
+     stds:['ISO/IEC 27001:2022 Cl. 6.1.2','ISO/IEC 27005:2022','NIST SP 800-30 Rev 1','NIST CSF 2.0 ID.RA','FAIR Framework']},
+  1:{q:'Cyber Risk Register Integration',
+     risk:'Siloed cyber risk registers that sit outside the enterprise risk framework create blind spots for senior leadership and complicate regulatory reporting. Enterprise-wide risk management requires cyber risks to be visible, comparable and governed consistently.',
+     actions:['Integrate cyber risks into the enterprise risk register using the same taxonomy, scoring methodology and governance cycle as all other enterprise risks.','Assign formal risk owners at function level (not just the CISO) to reinforce business accountability for cyber risk.','Ensure risk treatments are documented with specific actions, milestones, resource requirements and deadlines — not vague commitments.','Establish a quarterly risk register review cycle with escalation thresholds: risks above appetite must be escalated to the Risk Committee within a defined period.','Align cyber risk register to COSO ERM or ISO 31000 principles and ensure it is reviewed as part of the annual internal audit programme.'],
+     stds:['ISO 31000:2018','COSO ERM Framework','ISO/IEC 27001:2022 Cl. 6.1.2','NIST CSF 2.0 GV.RM','Three Lines of Defence']},
+  2:{q:'Cybersecurity Risk Appetite Statement',
+     risk:"Without a risk appetite statement, there is no agreed threshold for what level of cyber risk the organisation is willing to accept. This makes governance decisions inconsistent and leaves regulators, auditors and the Board without a meaningful reference point.",
+     actions:['Develop a Cybersecurity Risk Appetite Statement approved by the Board, covering: acceptable frequency of security incidents, maximum acceptable data loss, recovery time expectations, threshold for regulatory breach (zero tolerance), and tolerance for reputational risk.','Express appetite in both qualitative terms (narrative) and quantitative terms (KRI thresholds) to enable ongoing monitoring.','Cascade the appetite statement into operational metrics — e.g. if the appetite is "no critical vulnerabilities unpatched beyond 72 hours," this must become an enforceable SLA.','Review the appetite statement annually and following material incidents, regulatory changes or significant shifts in the threat landscape.','Use the FSB\'s Supervisory Guidance on Operational Resilience and Bank of England appetite frameworks as reference templates.'],
+     stds:['FSB Risk Appetite Framework','ISO 31000:2018','NIST CSF 2.0 GV.RM-07','Basel BCBS 239','NIST SP 800-39']},
+  3:{q:'Emerging Threat Monitoring',
+     risk:"Organisations that do not monitor evolving threats operate reactively. The Nigerian banking sector recorded 4,718 weekly cyberattacks in 2024 (Check Point). Without threat intelligence, organisations cannot anticipate, prepare for or defend against the methods attackers are actively using.",
+     actions:['Subscribe to at least one sector-relevant threat intelligence feed: FS-ISAC (financial services), NCSC Early Warning (UK), Nigeria Computer Emergency Response Team (ngCERT), or a commercial provider (Recorded Future, Mandiant, CrowdStrike Intelligence).','Integrate threat intelligence with your SIEM/SOC to enable automated alerting on indicators of compromise (IoCs) relevant to your sector and geography.','Adopt the MITRE ATT&CK Framework to map threat actor TTPs to your existing controls, identifying coverage gaps.','Conduct a quarterly Threat Landscape Review — summarise top threats, relevant incidents in your sector, and control responses — for distribution to the Board and CISO.','Establish a process for translating threat intelligence into actionable control updates within a defined SLA (e.g. critical threat = 24-hour response).'],
+     stds:['NIST SP 800-150','MITRE ATT&CK v14','CIS Controls v8 — Control 17','ISO/IEC 27001:2022 A.8.16','STIX/TAXII Standards']},
+  4:{q:'Residual Risk Review and Escalation',
+     risk:'Residual risk that is not actively monitored can silently exceed risk appetite as the threat landscape evolves or controls degrade. Regulators expect evidence of ongoing risk oversight, not just initial assessment.',
+     actions:['Establish a formal quarterly Residual Risk Review cycle chaired by the CRO or CISO, with outputs reported to the Board Risk Committee.','Define escalation thresholds: residual risks rated Critical or above appetite must be escalated to the Board within 5 business days with a remediation plan.','Track changes in residual risk ratings over time — deterioration in a risk score should trigger an automatic review of treatment plans.','Produce a quarterly Residual Risk Summary report comparing current residual risk against the Board-approved risk appetite, with trend analysis.','Ensure internal audit includes residual risk tracking in its annual cyber audit programme.'],
+     stds:['ISO/IEC 27001:2022 Cl. 8.2','NIST CSF 2.0 ID.RM-03','COSO ERM — Risk Monitoring','ISO 31000:2018 Cl. 6.6','CBN CSAT Domain 2']}
+ },
+ 3:{
+  0:{q:'Asset Inventory',
+     risk:"You cannot protect what you do not know you have. Asset inventory gaps are the most common root cause of successful cyberattacks — attackers frequently exploit forgotten or unmanaged assets. CIS Control 1 identifies asset management as the foundational cybersecurity control.",
+     actions:['Deploy an automated asset discovery and inventory tool (e.g. Lansweeper, Qualys CSAM, Axonius, or ServiceNow CMDB) to continuously discover and catalogue all hardware (servers, endpoints, mobile, IoT) and software assets.','Classify all assets by business criticality (Tier 1: mission critical; Tier 2: business important; Tier 3: standard) and assign a formal asset owner for each.','Include cloud assets, SaaS subscriptions and shadow IT in the discovery scope — deploy a CASB (Cloud Access Security Broker) where necessary.','Integrate the asset inventory with vulnerability management, patch management and configuration management processes.','Conduct a quarterly reconciliation of the asset inventory against procurement records, CMDB and network scan results to identify unauthorised assets.'],
+     stds:['CIS Controls v8 — Control 1 & 2','ISO/IEC 27001:2022 A.8.1','NIST CSF 2.0 ID.AM','NIST SP 800-171 Cl. 3.4']},
+  1:{q:'Least Privilege Access Controls',
+     risk:"Overprivileged accounts are the most exploited attack vector in cyberattacks — enabling lateral movement, data exfiltration and ransomware deployment. Access reviews are a minimum regulatory expectation across FCA, CBN and data protection frameworks.",
+     actions:['Implement a formal Identity and Access Management (IAM) solution (e.g. Microsoft Entra ID, Okta, SailPoint) to enforce role-based access control (RBAC) across all systems.','Conduct an immediate privilege access review — revoke access for leavers, reduce over-privileged accounts, eliminate generic/shared accounts.','Deploy a Privileged Access Management (PAM) solution (e.g. CyberArk, BeyondTrust) for all privileged and administrative accounts — enforce just-in-time (JIT) access with session recording.','Establish quarterly access certification reviews where line managers attest to the appropriateness of their team members\' access rights.','Adopt a Zero Trust Architecture (ZTA) roadmap per NIST SP 800-207: verify every user, every device, every time — never trust implicitly.'],
+     stds:['CIS Controls v8 — Controls 5 & 6','ISO/IEC 27001:2022 A.9','NIST SP 800-207 (Zero Trust)','NIST CSF 2.0 PR.AA','NIST SP 800-53 AC family']},
+  2:{q:'Multi-Factor Authentication (MFA)',
+     risk:"Single-factor authentication remains the primary enabler of account takeover attacks. NCSC data shows MFA blocks over 99% of automated attacks. Regulators including the CBN, FCA and ICO expect MFA as a baseline control for all critical systems.",
+     actions:["Deploy MFA across all critical systems, applications, VPN connections, cloud services, admin consoles, email platforms, and privileged accounts — without exception.",'Prioritise phishing-resistant MFA methods (FIDO2/WebAuthn, hardware security keys) over SMS OTP, which is vulnerable to SIM-swap attacks, for privileged and high-risk users.','Establish a clear MFA roadmap: Phase 1 (privileged accounts, remote access — 30 days), Phase 2 (all corporate applications — 60 days), Phase 3 (passwordless authentication — 12 months).','Implement Conditional Access Policies that evaluate device compliance, location and risk signals before granting access, even post-MFA.','Monitor and alert on MFA bypass attempts, unusual authentication patterns and legacy protocol usage via SIEM.'],
+     stds:['NIST SP 800-63B (AAL2/AAL3)','CIS Controls v8 — Control 6.3','FIDO2/WebAuthn Standards','NCSC MFA Guidance','ISO/IEC 27001:2022 A.9.4']},
+  3:{q:'Data Encryption',
+     risk:'Unencrypted data is exposed by breaches, insider threats and physical device loss. GDPR (Article 32), Nigeria Data Protection Act, and CBN data protection requirements treat encryption of sensitive data as a mandatory technical measure.',
+     actions:['Implement full-disk encryption (BitLocker, FileVault, or equivalent) on all endpoints, laptops, and mobile devices to protect data at rest from physical loss.','Enforce TLS 1.2 or higher (preferably TLS 1.3) for all data in transit — disable TLS 1.0/1.1 and all SSL versions; implement HTTPS-only policies.','Deploy AES-256 encryption for all databases, file stores, backups and cloud storage containing sensitive, personal or regulated data.','Establish a formal Encryption Key Management Policy covering key generation, storage (HSM where appropriate), rotation, and secure destruction.','Conduct a quarterly encryption audit across all storage systems, databases, backups, email archives and cloud environments to identify unencrypted data stores.'],
+     stds:['ISO/IEC 27001:2022 A.10','NIST SP 800-52 Rev 2 (TLS)','NIST SP 800-111 (Storage)','GDPR Article 32','Nigeria Data Protection Act 2023']},
+  4:{q:'Patch Management',
+     risk:'Unpatched vulnerabilities are the leading technical cause of successful cyberattacks. The CBN CSAT circular was issued in direct response to surging attacks on Nigerian financial infrastructure — many of which exploited known, patchable vulnerabilities.',
+     actions:['Implement automated vulnerability scanning (Qualys, Tenable, Rapid7) across all assets — minimum weekly for internet-facing systems, monthly for internal.','Define and enforce risk-based patching SLAs: Critical (CVSS 9–10) within 24–72 hours; High (CVSS 7–8.9) within 7 days; Medium within 30 days; Low within 90 days.','Establish a formal Change Management process for patches — emergency change process for critical vulnerabilities that bypasses standard approval timelines.','Maintain a documented exception register for systems that cannot be patched — all exceptions must have compensating controls, a defined remediation plan and CISO/senior management sign-off.','Produce a monthly Vulnerability Management Report for the CISO and quarterly Board reporting, showing patch compliance rates, open critical vulnerabilities, and trend analysis.'],
+     stds:['CIS Controls v8 — Control 7','ISO/IEC 27001:2022 A.12.6','NIST SP 800-40 Rev 4','NIST CSF 2.0 ID.RA-01','CBN CSAT Domain 3']}
+ },
+ 4:{
+  0:{q:'Third-Party Vendor Assessment Process',
+     risk:'Supply chain attacks now account for a significant proportion of enterprise breaches. The SolarWinds, MOVEit and similar incidents illustrate that attackers increasingly target suppliers as a route into well-defended organisations. DORA (Article 28) and CBN guidance explicitly require TPRM frameworks.',
+     actions:['Develop a formal Third-Party Risk Management (TPRM) Policy and Framework, including a vendor tiering methodology: Critical (direct access to systems/data), High (indirect access, key operational dependency), Medium (limited access), Low (no data/system access).','Create a standardised pre-engagement Cybersecurity Due Diligence Questionnaire aligned to SIG Lite, CAIQ (Cloud Security Alliance) or a bespoke framework, covering: security policies, access controls, incident history, certifications, business continuity capabilities.','Require evidence of independent assurance for Critical vendors: ISO 27001 certification, SOC 2 Type II report, or penetration test results from an approved provider.','Establish a vendor risk register as a subsidiary of the enterprise risk register, with quarterly review of Critical and High-tier vendors.','Assign a Third-Party Risk Manager or designate responsibility within the CISO/procurement function.'],
+     stds:['ISO/IEC 27001:2022 A.15','NIST SP 800-161r1 (C-SCRM)','DORA Article 28','CIS Controls v8 — Control 15','EBA ICT Risk Guidelines']},
+  1:{q:'Critical Vendor Due Diligence',
+     risk:'Onboarding a critical vendor without cybersecurity due diligence is a regulatory red flag. CBN and FCA/PRA supervisory reviews increasingly scrutinise vendor risk practices — the absence of pre-onboarding diligence is treated as a material control failure.',
+     actions:['Require all Critical and High-tier vendors to complete a detailed cybersecurity questionnaire before contract execution — evaluate responses against a defined scoring rubric.','Review vendor certifications: ISO 27001, SOC 2 Type II, PCI DSS (where relevant), CSA STAR, or equivalent. Certificates must be current and from accredited certification bodies.','Request and review: vulnerability management policies, penetration test results (last 12 months), incident response plans, data breach history, sub-processor lists, and business continuity documentation.','For highest-risk vendors (e.g. core banking platforms, cloud infrastructure providers), conduct an on-site or remote technical audit before onboarding.','Document all due diligence outcomes in the vendor risk register, including risk ratings, identified issues and agreed mitigations before contract signing.'],
+     stds:['DORA Article 28–30','ISO/IEC 27001:2022 A.15.1','NIST SP 800-161r1','EBA ICT Risk Guidelines Cl. 4.5','CBN CSAT Domain 4']},
+  2:{q:'Vendor Contractual Obligations',
+     risk:"Contracts without cybersecurity clauses leave organisations without recourse in the event of a vendor breach. Under GDPR and Nigeria's Data Protection Act, data controllers are liable for breaches caused by processors who have not been adequately contractually bound.",
+     actions:['Develop a Standard Cybersecurity Contract Addendum to be attached to all vendor agreements, covering: data protection obligations, security standards compliance (ISO 27001/SOC 2), breach notification timelines (72 hours maximum), sub-processor approval requirements, audit and inspection rights, right to terminate on material breach, and security incident cooperation.','For GDPR/NDPA compliance, ensure all data processors sign a Data Processing Agreement (DPA) aligned to Article 28 requirements.','Conduct a retrospective review of all existing Critical and High-tier vendor contracts against the new standard — log gaps and initiate renegotiation.','Align contractual requirements to DORA Article 30 mandatory provisions for ICT third-party service providers where applicable.','Establish a contracts repository with expiry tracking, renewal review schedule and annual CISO sign-off on vendor cybersecurity compliance.'],
+     stds:['GDPR Article 28','Nigeria Data Protection Act 2023','DORA Article 30','ISO/IEC 27001:2022 A.15.2','EBA Outsourcing Guidelines']},
+  3:{q:'Ongoing Third-Party Monitoring',
+     risk:'A vendor that was compliant at onboarding may deteriorate. Supply chain risk is dynamic — vendor financial instability, staffing changes, security incidents, or certification lapses all represent emerging risks that point-in-time assessments cannot capture.',
+     actions:['Implement continuous third-party monitoring for Critical vendors using cybersecurity ratings platforms (BitSight, SecurityScorecard, RiskRecon) — set automated alerts for score deterioration.','Conduct formal annual reassessments of Critical vendors and bi-annual for High-tier — update risk ratings and review contractual compliance.','Monitor for vendor security incidents via public disclosures, NCSC/ngCERT alerts, threat intelligence feeds, and sector ISACs.','Establish a Third-Party Incident Notification requirement — vendors must notify within 24 hours of a security incident that could affect your organisation.','Track and review third-party access: conduct quarterly reviews of all third-party accounts, VPN access, API keys and data sharing arrangements.'],
+     stds:['DORA Article 28 (ongoing monitoring)','NIST SP 800-161r1 Cl. 3.7','ISO/IEC 27001:2022 A.15.2','CIS Controls v8 — Control 15.2','EBA ICT Risk Guidelines Cl. 4.5']},
+  4:{q:'Cloud and SaaS Risk Management',
+     risk:'Cloud adoption has dramatically expanded the attack surface for most organisations. Without a formal cloud risk programme, Shadow IT, misconfigured cloud storage and overpermissioned SaaS applications represent unmonitored high-risk exposures.',
+     actions:['Conduct a complete Cloud and SaaS inventory — use a CASB (Cloud Access Security Broker) or SSPM (SaaS Security Posture Management) tool to discover all cloud services in use, including Shadow IT.','Assess each cloud provider and SaaS platform against the Cloud Security Alliance (CSA) Cloud Controls Matrix (CCM) or equivalent framework.','Review Shared Responsibility Models with all cloud providers — document clearly what the provider is responsible for versus what your organisation must own and control.','Enforce data residency and sovereignty requirements — confirm where data is stored and processed, particularly for regulated or sensitive data sets subject to CBN, GDPR, or Nigeria Data Protection Act requirements.','Implement cloud-native security baselines using CIS Benchmarks for AWS, Azure, GCP or equivalent — configure automated alerts for misconfigurations (open S3 buckets, excessive permissions, disabled MFA).'],
+     stds:['CSA Cloud Controls Matrix (CCM) v4','ISO/IEC 27017:2015 (Cloud Security)','NIST SP 800-144','CIS Benchmarks — AWS/Azure/GCP','CBN Cloud Computing Guidelines']}
+ },
+ 5:{
+  0:{q:'Documented Incident Response Plan (IRP)',
+     risk:"Without a documented IRP, organisations respond to cyber incidents ad hoc — causing delays, miscoordination, regulatory notification failures, and evidence destruction. The SANS Institute reports that unplanned incident responses cost 3–5 times more than those with documented plans.",
+     actions:["Document a comprehensive Incident Response Plan structured around the NIST SP 800-61r3 lifecycle: Preparation → Detection & Analysis → Containment → Eradication → Recovery → Post-Incident Activity.",'Define incident classification tiers (P1: Critical/Business-stopping; P2: High/Significant impact; P3: Medium; P4: Low) with specific response timelines, escalation paths and communication templates for each tier.','Include regulatory notification procedures with precise timelines: CBN — notify within 24 hours of a material incident; GDPR/NDPA — notify the supervisory authority within 72 hours of a personal data breach.','Develop pre-approved stakeholder communication templates: Board briefing, staff communication, customer notification, regulator notification, and media statement.','Define and document the Incident Response Team (IRT): IR Lead, Technical Lead, Legal Counsel, Communications Officer, HR, and executive sponsor — with contact details and clear authority levels.','Incorporate specific playbooks for the highest-probability incident types: ransomware, phishing/BEC, data exfiltration, DDoS, insider threat, and cloud misconfiguration.'],
+     stds:['NIST SP 800-61r3','ISO/IEC 27035:2023','SANS Incident Response Framework','CBN Cybersecurity Incident Reporting','GDPR Article 33']},
+  1:{q:'IRP Testing and Exercises',
+     risk:"An untested IRP is an unproven IRP. Tabletop exercises consistently expose critical gaps in communication chains, decision-making authority and technical procedures that would only be discovered — far more expensively — during a real incident.",
+     actions:['Schedule and conduct a tabletop exercise within 60 days, facilitated by an experienced cybersecurity practitioner — focus on a scenario relevant to your sector (e.g. ransomware impacting core operations, or third-party data breach).','Develop an annual exercise programme covering three levels: tabletop (narrative/discussion-based), functional (partial technical activation), and full-scale (complete activation of IRT and recovery systems).','Consider sector-specific exercise frameworks: CBEST (Bank of England), TIBER-EU, or CREST STAR (Simulated Targeted Attack and Response) for more mature programmes.','Document all exercise outcomes including: timeline analysis, decision points, communication failures, evidence gaps, and recommended plan updates — present findings to the Board Risk Committee.','Ensure the IRP is updated within 30 days of every exercise, incorporating lessons learned and validated procedures.'],
+     stds:['NIST SP 800-84','ISO/IEC 27035:2023','CBEST/TIBER-EU Framework','CREST STAR Methodology','FSB CIRR (Cyber Incident Response)']},
+  2:{q:'Incident Response Staff Training',
+     risk:"The human element remains the most critical factor in effective incident response. Research consistently shows that organisations with trained, scenario-tested staff contain incidents 40–60% faster than those without structured training.",
+     actions:['Implement role-based incident response training across four audiences: (1) Technical responders (SOC, IT, DevOps) — technical containment, forensic preservation, evidence handling; (2) Management — decision-making, stakeholder management, business continuity activation; (3) Legal/Compliance — regulatory notification, privilege, legal holds; (4) All staff — detection, reporting procedures, social engineering awareness.','Conduct quarterly phishing simulations with targeted training for those who click — track click rates and reporting rates as KPIs, aiming for <5% click rate and >80% reporting rate.','Ensure all staff complete annual Security Awareness Training covering: social engineering, phishing, password hygiene, data handling, and incident reporting.','Deliver annual incident response awareness specifically for senior leadership covering: their statutory obligations, regulatory notification responsibilities, and crisis communication principles.','Document all training completion rates, test scores and remediation plans — maintain training records as audit evidence.'],
+     stds:['NIST NICE Cybersecurity Workforce Framework','ISO/IEC 27001:2022 Cl. 7.2','SANS Security Awareness Training','CIS Controls v8 — Control 14','CBN CSAT Domain 5']},
+  3:{q:'Escalation and Regulatory Notification',
+     risk:"Failure to notify regulators within required timelines is a standalone regulatory offence, separate from the underlying incident. CBN, GDPR (via ICO/NDPB), and NIS2 authorities have issued significant fines for notification delays — regardless of the severity of the breach.",
+     actions:['Document a precise Regulatory Notification Matrix covering all applicable jurisdictions: CBN (24-hour notification for material cyber incidents), ICO/NDPB (72-hour GDPR/NDPA notification for personal data breaches), FCA (immediate notification for operational disruptions at regulated firms), PRA, NDPC.','Create pre-approved notification templates for each regulator — reviewed by legal counsel — that can be completed within minutes during an incident.','Define clear escalation triggers and decision points: who decides to notify, at what threshold, with what information, and through what channel.','Establish a Legal and Regulatory Response Retainer with external cybersecurity counsel — ensure they are briefed on the organisation\'s profile before any incident occurs.','Conduct an annual regulatory notification drill as part of the IRP exercise programme — validate timelines, decision chains and template adequacy.'],
+     stds:['GDPR Article 33','Nigeria Data Protection Act 2023','CBN Cybersecurity Circular (March 2026)','NIS2 Article 23','FCA SYSC 21']},
+  4:{q:'Incident Logging and Lessons Learned',
+     risk:"Organisations that do not formally capture and act on incident data repeat the same mistakes. Regulators, auditors and insurers increasingly require evidence of structured post-incident review — and the absence of a log is itself a significant finding.",
+     actions:['Implement a formal Incident Register using a dedicated ITSM/SOAR tool (ServiceNow, Splunk SOAR, PagerDuty, or Jira Service Management) — log all incidents including near-misses, regardless of severity.','Mandate structured Post-Incident Reviews (PIRs) for all P1 and P2 incidents within 5 business days: cover timeline, root cause, impact assessment, control failures, and recommended improvements.','Track all post-incident action items in the risk register with assigned owners, target completion dates and evidence requirements.','Produce a quarterly Cyber Incident Trend Report for the Board: incident volume by type, severity, source, response times, and recurring themes.','Feed incident data into control effectiveness reviews, risk appetite assessments and the annual IRP update — creating a genuine continuous improvement cycle.'],
+     stds:['ISO/IEC 27035:2023 Cl. 5.6','NIST SP 800-61r3 Sec. 3.4','ISO/IEC 27001:2022 A.16.1.6','CIS Controls v8 — Control 17.7','FSB Cyber Incident Reporting']}
+ },
+ 6:{
+  0:{q:'Business Continuity Plan with Cyber Scenarios',
+     risk:"Generic BCPs that do not account for cyber disruption scenarios are inadequate. Ransomware, DDoS and data destruction incidents have characteristics fundamentally different from physical disruptions — they can persist for weeks, spread laterally, and make systems untrustworthy even after apparent recovery.",
+     actions:['Update the BCP to include a dedicated Cyber Disruption Annex with specific playbooks for: (1) Ransomware (systems locked, backups potentially compromised); (2) DDoS (services unavailable, customer impact); (3) Data breach (exfiltration, regulatory notification obligations); (4) Cloud provider outage; (5) Critical third-party failure; (6) Insider threat (systems potentially compromised by trusted user).','Define Critical Business Services (CBS) for each scenario — identify the minimum capabilities required to continue serving customers and meeting regulatory obligations during disruption.','Map Impact Tolerances for each CBS: the maximum tolerable duration of disruption before severe harm occurs to customers, the firm, or financial stability.','Establish manual fallback procedures for all critical digital processes — ensure paper-based or alternative-channel options exist and are tested.','Align the BCP to PRA/FCA Operational Resilience requirements and Bank of England guidance where applicable.'],
+     stds:['ISO 22301:2019','ISO/IEC 27031:2011','DORA Article 11','PRA/FCA Operational Resilience PS6/21','CBN CSAT Domain 6']},
+  1:{q:'Disaster Recovery Plan with Tested RTOs/RPOs',
+     risk:"A DRP with untested RTOs and RPOs provides false assurance. During an actual incident, unvalidated recovery timelines routinely prove to be wildly optimistic — causing prolonged outages, regulatory breaches and significant financial harm.",
+     actions:['Define RTOs and RPOs for each critical system based on a formal Business Impact Analysis (BIA) — typical targets for financial services: Core banking (RTO 4hrs, RPO 1hr), Customer portal (RTO 2hrs, RPO 30min), Email (RTO 8hrs, RPO 4hrs), Regulatory reporting systems (RTO 4hrs, RPO 2hrs).','Document detailed technical recovery runbooks for each critical system — step-by-step procedures validated by the teams who would execute them under pressure.','Conduct DRP tests at least annually: tabletop test (Q1), partial failover test (Q2/Q3), full failover test (Q4) — document results, deviations from expected RTOs/RPOs, and remediation actions.','Establish an alternate processing site or cloud failover capability — ensure it is geographically separated from the primary site and maintains equivalent security controls.','Align the DRP to DORA ICT Business Continuity Management requirements (Article 12) and PRA SS4/21 operational resilience standards where applicable.'],
+     stds:['NIST SP 800-34 Rev 1','ISO/IEC 27031:2011','DORA Article 12','ISO 22301:2019 Cl. 8.4','PRA SS4/21']},
+  2:{q:'Backup and Recovery Testing',
+     risk:"Backup systems that have never been tested for recovery are theoretical assets. Ransomware groups now specifically target and destroy backup systems before encrypting production data — making immutable, air-gapped backups and regular recovery testing critical survival capabilities.",
+     actions:['Implement the 3-2-1-1-0 backup rule: maintain at least 3 copies of critical data, on 2 different media types, with 1 copy offsite, 1 copy offline/immutable (air-gapped, ransomware-resistant), and 0 errors verified on recovery tests.','Deploy immutable backup solutions (WORM — Write Once Read Many) to protect backups from ransomware encryption or deletion — AWS S3 Object Lock, Azure Blob immutable storage, or equivalent on-premises solution.','Conduct monthly recovery tests on at least one critical system, rotating across the critical system inventory quarterly — document success rate, recovery time achieved vs. RTO, and data integrity validation.','Ensure backup systems are on an isolated network segment with separate credentials — backup admin access must not be achievable via the same credentials used to access production systems.','Maintain an offline backup of cryptographic keys, recovery documentation, and critical credentials in a physically secured location accessible during a total system compromise.'],
+     stds:['CIS Controls v8 — Control 11','ISO/IEC 27001:2022 A.12.3','NIST SP 800-53 CP-9','3-2-1-1-0 Backup Rule','DORA Article 12.1(e)']},
+  3:{q:'Redundancy and Single Points of Failure',
+     risk:"Single points of failure (SPOFs) represent the greatest threat to operational resilience. A single unredundant component — a switch, an ISP connection, a data centre power feed, or a key person — can take down an entire organisation.",
+     actions:['Conduct a formal Single Point of Failure (SPOF) analysis across all layers: network (routers, switches, firewalls), connectivity (ISP links, WAN), compute (servers, hypervisors), storage, power (UPS, generators), cooling, and personnel (key person dependency).','Implement N+1 or N+2 redundancy for all Tier 1 and Tier 2 critical infrastructure components — document the redundancy architecture and test failover procedures quarterly.','Procure diverse internet connectivity from at least two separate ISPs using different physical routes and technologies (e.g. fibre + 4G/5G failover).','Deploy critical systems across multiple availability zones or data centres (primary + secondary site minimum) — for cloud-native organisations, implement multi-region architecture with active-active or active-passive failover.','Address key person dependencies: ensure all critical technical procedures are documented and at least two individuals are trained to execute each.'],
+     stds:['ISO/IEC 27001:2022 A.17','NIST SP 800-53 CP-7','DORA Article 11','ISO 22301:2019','Uptime Institute Tier Standards']},
+  4:{q:'Cyber Resilience Exercises',
+     risk:"Organisations that do not test their resilience under simulated pressure discover their gaps at the worst possible time — during a real incident. Regulators increasingly view exercise programmes as a leading indicator of operational resilience maturity.",
+     actions:['Develop a structured annual Cyber Resilience Exercise Programme with three components: (1) Strategic — Board-level decision-making simulation (crisis management, regulatory liaison, communications); (2) Tactical — Management team coordination and escalation; (3) Technical — Full system recovery and forensic response.','Conduct exercises using realistic, sector-specific scenarios informed by current threat intelligence — rotate scenarios annually: Year 1 (ransomware), Year 2 (supply chain compromise), Year 3 (insider threat/data exfiltration).','Engage an independent, specialist facilitator (CREST-accredited firm, or equivalent) to ensure objectivity, realism and benchmark comparison to industry peers.','Produce a formal Exercise Report after each session: what went well, what failed, timeline analysis, specific remediation actions with owners and deadlines — present to the Board Risk Committee.','Align the exercise programme to FSB Effective Practices for Cyber Incident Response and Recovery (CIRR), CBEST/TIBER-EU guidelines, and DORA requirements where applicable.'],
+     stds:['FSB Cyber CIRR (2020)','CBEST/TIBER-EU Framework','DORA Article 26','CREST STAR','ISO 22301:2019 Cl. 8.5']}
+ }
+};
+
+const getMat=p=>MAT.find(m=>p>=m.min&&p<=m.max)||MAT[0];
+const barCol=p=>p>=80?'#2D9B60':p>=60?'#B8860B':p>=40?'#C97A1A':'#C0392B';
+
+let curD=0,ans={},orgI={},chartInst=null;
+const LS_KEY='cgd_progress';
+
+/* ── LOCAL STORAGE ────────────────────────────── */
+function saveProgress(){localStorage.setItem(LS_KEY,JSON.stringify({ans,orgI,curD}));}
+function loadProgress(){
+  try{
+    const s=localStorage.getItem(LS_KEY);
+    if(!s)return false;
+    const d=JSON.parse(s);
+    ans=d.ans||{};orgI=d.orgI||{};curD=d.curD||0;
+    return true;
+  }catch{return false;}
+}
+function clearProgress(){localStorage.removeItem(LS_KEY);}
+
+/* ── NAV ──────────────────────────────────────── */
+function goTo(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ── START ────────────────────────────────────── */
+function startAssessment(){
+  orgI={
+    name:document.getElementById('org-name').value.trim()||'Your Organisation',
+    sector:document.getElementById('org-sector').value||'Not specified',
+    size:document.getElementById('org-size').value||'Not specified',
+    date:document.getElementById('org-date').value||new Date().toISOString().split('T')[0],
+    contact:document.getElementById('org-contact').value.trim()||''
+  };
+  saveProgress();
+  renderDomain(0);
+  goTo('pg-domain');
+}
+
+/* ── DOMAIN RENDER ────────────────────────────── */
+function renderDomain(idx){
+  const d=DOMAINS[idx];
+  const saved=ans[idx]||{};
+  document.getElementById('prog-fill').style.width=Math.round(((idx+1)/DOMAINS.length)*100)+'%';
+  document.getElementById('prog-nm').textContent=d.name;
+  document.getElementById('prog-st').textContent=`Domain ${idx+1} of ${DOMAINS.length}`;
+
+  let qs='';
+  d.q.forEach((q,qi)=>{
+    const v=saved[qi];
+    qs+=`${qi>0?'<div class="q-div"></div>':''}
+    <div class="q-blk">
+      <div class="q-lbl">Question ${qi+1} of ${d.q.length}</div>
+      <div class="q-txt">${q}</div>
+      <div class="q-opts">
+        <button class="q-opt${v===2?' sy':''}" onclick="pick(${idx},${qi},2,this)">Yes<span class="sub">Fully in place</span></button>
+        <button class="q-opt${v===1?' sp':''}" onclick="pick(${idx},${qi},1,this)">Partial<span class="sub">In progress</span></button>
+        <button class="q-opt${v===0?' sn':''}" onclick="pick(${idx},${qi},0,this)">No<span class="sub">Not in place</span></button>
+      </div>
+    </div>`;
+  });
+
+  const isFirst=idx===0,isLast=idx===DOMAINS.length-1;
+  document.getElementById('dom-content').innerHTML=`
+    <div class="d-hdr"><div class="d-ico">${d.icon}</div><h2 class="d-ttl">${d.name}</h2></div>
+    <p class="d-desc">${d.desc}</p>${qs}
+    <div class="nav-row">
+      <button class="btn-ghost" onclick="${isFirst?"goTo('pg-form')":`renderDomain(${idx-1})`}">&larr; ${isFirst?'Back':'Previous'}</button>
+      <button class="btn-solid" onclick="${isLast?'buildResults()':`renderDomain(${idx+1})`}">${isLast?'View My Results &rarr;':'Next Domain &rarr;'}</button>
+    </div>`;
+  curD=idx;
+}
+
+function pick(dIdx,qIdx,val,btn){
+  if(!ans[dIdx])ans[dIdx]={};
+  ans[dIdx][qIdx]=val;
+  btn.parentElement.querySelectorAll('.q-opt').forEach(b=>{b.className='q-opt';});
+  btn.classList.add(val===2?'sy':val===1?'sp':'sn');
+  saveProgress();
+}
+
+/* ── SCORES ───────────────────────────────────── */
+function computeScores(){
+  return DOMAINS.map((d,di)=>{
+    const a=ans[di]||{};
+    let tot=0;
+    d.q.forEach((_,qi)=>{tot+=(a[qi]!==undefined?a[qi]:0);});
+    return{domain:d,pct:Math.round((tot/(d.q.length*2))*100),ans:a,di};
+  });
+}
+
+/* ── BUILD RESULTS ────────────────────────────── */
+function buildResults(){
+  goTo('pg-results');
+  saveProgress();
+
+  const scores=computeScores();
+  const overall=Math.round(scores.reduce((a,s)=>a+s.pct,0)/scores.length);
+  const mat=getMat(overall);
+
+  /* Org line */
+  const orgLine=`${orgI.name}${orgI.sector!=='Not specified'?' · '+orgI.sector:''} · ${orgI.date}${orgI.contact?' · '+orgI.contact:''}`;
+  document.getElementById('res-org').textContent=orgLine;
+
+  /* Ring */
+  setTimeout(()=>{
+    const circ=289.03;
+    document.getElementById('ring-arc').style.strokeDashoffset=circ-(overall/100)*circ;
+    document.getElementById('ring-pct').textContent=overall+'%';
+  },120);
+
+  const b=document.getElementById('mat-bdg');
+  b.textContent=mat.label;b.style.background=mat.bg;b.style.color=mat.col;
+  document.getElementById('mat-ttl').textContent=mat.title;
+  document.getElementById('mat-desc').textContent=mat.desc;
+
+  /* Domain score cards */
+  document.getElementById('ds-grid').innerHTML=scores.map(s=>{
+    const m=getMat(s.pct);
+    return`<div class="ds-card">
+      <div class="ds-nm">${s.domain.icon} ${s.domain.name}</div>
+      <div class="bar-t"><div class="bar-f" style="width:${s.pct}%;background:${barCol(s.pct)};"></div></div>
+      <span class="ds-pct">${s.pct}%</span><span class="ds-lvl">${m.label}</span>
+    </div>`;
+  }).join('');
+
+  /* Radar chart */
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  chartInst=new Chart(document.getElementById('radar-chart').getContext('2d'),{
+    type:'radar',
+    data:{
+      labels:scores.map(s=>s.domain.name.replace(' Practices','').replace(' Safeguards','').replace(' Capabilities','').replace(' Controls','')),
+      datasets:[{label:orgI.name,data:scores.map(s=>s.pct),backgroundColor:'rgba(31,191,215,0.12)',borderColor:'#1FBFD7',borderWidth:2,pointBackgroundColor:'#1FBFD7',pointRadius:5}]
+    },
+    options:{responsive:true,scales:{r:{min:0,max:100,ticks:{stepSize:25,font:{size:10},color:'#718096',backdropColor:'transparent'},grid:{color:'rgba(0,0,0,0.07)'},pointLabels:{font:{size:11,weight:'500'},color:'#0A1A2F'}}},plugins:{legend:{display:false}}}
+  });
+
+  /* Gap table */
+  document.getElementById('gap-body').innerHTML=scores.map(s=>{
+    const m=getMat(s.pct);
+    const p=s.pct<40?'c':s.pct<65?'h':'m';
+    const pl=p==='c'?'Critical':p==='h'?'High':'Medium';
+    const gaps=Object.keys(s.ans).filter(qi=>s.ans[qi]<2).length;
+    const absent=Object.keys(s.ans).filter(qi=>s.ans[qi]===0).length;
+    const partial=Object.keys(s.ans).filter(qi=>s.ans[qi]===1).length;
+    const summary=s.pct>=80?'Minor enhancements recommended':`${gaps} of ${s.domain.q.length} areas require improvement (${absent} absent, ${partial} partial)`;
+    return`<tr><td><strong>${s.domain.icon} ${s.domain.name}</strong><br><span style="font-size:11.5px;color:var(--muted);">${summary}</span></td><td><strong>${s.pct}%</strong></td><td>${m.label}</td><td><span class="pt pt-${p}">${pl}</span></td></tr>`;
+  }).join('');
+
+  /* Action plan */
+  let aHtml='';
+  const tLbls={c:'Immediate Actions — 0 to 30 Days',h:'Short-Term Actions — 30 to 60 Days',m:'Medium-Term Actions — 60 to 90 Days'};
+  ['c','h','m'].forEach(p=>{
+    let sec='';
+    scores.forEach((s,di)=>{
+      const recs=RECS[di+1]||{};
+      s.domain.q.forEach((_,qi)=>{
+        if(s.ans[qi]!==undefined&&s.ans[qi]<2){
+          const r=recs[qi];if(!r)return;
+          const priority=s.pct<40?'c':s.pct<65?'h':'m';
+          if(priority!==p)return;
+          const ptag=p==='c'?'Critical':p==='h'?'High':'Medium';
+          sec+=`<div class="ac-card ${p}">
+            <div class="ac-hd">
+              <div class="ac-dom">${s.domain.icon} ${s.domain.name}</div>
+              <span class="ac-time">${p==='c'?'0–30 days':p==='h'?'30–60 days':'60–90 days'}</span>
+              <span class="pt pt-${p}">${ptag}</span>
+            </div>
+            <div class="ac-q">${r.q}</div>
+            <div class="ac-body">
+              <p style="margin-bottom:8px;font-style:italic;color:var(--mid);">${r.risk}</p>
+              <strong style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);">Recommended Actions</strong>
+              <ul>${r.actions.map(a=>`<li>${a}</li>`).join('')}</ul>
+              <div class="ac-stds">
+                <div class="ac-stds-lbl">Applicable Standards & Frameworks</div>
+                ${r.stds.map(s=>`<span class="std-tag">${s}</span>`).join('')}
+              </div>
+            </div>
+          </div>`;
+        }
+      });
+    });
+    if(sec)aHtml+=`<div class="r-sec" style="margin-top:1.25rem;">${tLbls[p]}</div>${sec}`;
+  });
+
+  if(!aHtml)aHtml=`<div class="ac-card m"><div class="ac-hd"><div class="ac-dom">No critical gaps identified</div></div><div class="ac-q">Strong cybersecurity governance maturity</div><div class="ac-body"><p>Your organisation demonstrates strong cybersecurity governance across all six dimensions. Maintain your current programme, continue testing, and ensure controls evolve alongside the threat landscape and regulatory requirements.</p></div></div>`;
+  document.getElementById('action-plan').innerHTML=aHtml;
+
+  /* Build exec summary */
+  buildExecSummary(scores,overall,mat,orgLine);
+
+  /* Email CTA with pre-filled body */
+  const emailBody=`Hello CCC Team,%0A%0AOrganisation%3A%20${encodeURIComponent(orgI.name)}%0ASector%3A%20${encodeURIComponent(orgI.sector)}%0AAssessment%20Date%3A%20${orgI.date}%0AOverall%20Maturity%20Score%3A%20${overall}%25%20(${mat.label})%0A%0AI%20have%20completed%20the%20CCC%20Cybersecurity%20Governance%20Diagnostic%20and%20would%20like%20to%20discuss%20the%20findings%20and%20explore%20how%20CCC%20can%20support%20our%20remediation%20programme.%0A%0APrimary%20gaps%20identified%3A%0A${scores.filter(s=>s.pct<65).map(s=>`-%20${s.domain.name}%20(${s.pct}%25)`).join('%0A')}%0A%0AThank%20you.`;
+  document.getElementById('email-cta-link').href=`mailto:info@cccgrp.com?subject=Cybersecurity%20Governance%20Diagnostic%20%E2%80%94%20${encodeURIComponent(orgI.name)}&body=${emailBody}`;
+}
+
+/* ── EXEC SUMMARY ─────────────────────────────── */
+function buildExecSummary(scores,overall,mat,orgLine){
+  const topGaps=scores.filter(s=>s.pct<75).sort((a,b)=>a.pct-b.pct).slice(0,3);
+  const critActions=scores.flatMap((s,di)=>
+    s.domain.q.map((_,qi)=>{
+      if(s.ans[qi]===0&&RECS[di+1]&&RECS[di+1][qi])return{domain:s.domain,rec:RECS[di+1][qi]};
+      return null;
+    }).filter(Boolean)
+  ).slice(0,5);
+
+  document.getElementById('exec-meta').innerHTML=
+    `<strong>${orgI.name}</strong><br>${orgI.sector}<br>${orgI.size}<br>Date: ${orgI.date}${orgI.contact?'<br>Prepared by: '+orgI.contact:''}`;
+
+  const narrative=`This Executive Summary presents the findings of the CCC Cybersecurity Governance Diagnostic™ completed by ${orgI.name} on ${orgI.date}. The diagnostic assessed the organisation's cybersecurity governance maturity across six critical dimensions: Cybersecurity Governance, Risk Management Practices, Technology Infrastructure Safeguards, Third-Party Risk Controls, Incident Response Capabilities, and Operational Resilience.
+
+${orgI.name} achieved an overall maturity score of ${overall}%, placing it at the <strong>${mat.label}</strong> level — ${mat.title.split('—')[1]?.trim()||mat.title}. ${mat.desc}
+
+${topGaps.length>0?`The assessment identified material gaps in ${topGaps.map(s=>s.domain.name).join(', ')} — domains that represent the highest priority areas for remediation. A structured action plan with recommendations aligned to ISO/IEC 27001:2022, NIST CSF 2.0, CIS Controls v8, and applicable regulatory requirements follows this summary.`:'The organisation demonstrates strong cybersecurity governance maturity across all assessed dimensions. A programme of continuous improvement is recommended to maintain and strengthen the current posture.'}`;
+
+  document.getElementById('exec-narrative').innerHTML=narrative.replace(/\n\n/g,'</p><p>').replace(/^/,'<p>').replace(/$/,'</p>');
+
+  /* Scores table */
+  document.getElementById('exec-scores-table').innerHTML=`
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--navy);margin-bottom:1rem;">Domain Maturity Summary</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead><tr style="background:var(--navy);color:white;">
+        <th style="padding:9px 14px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;">Domain</th>
+        <th style="padding:9px 14px;text-align:center;font-size:11px;text-transform:uppercase;">Score</th>
+        <th style="padding:9px 14px;text-align:center;font-size:11px;text-transform:uppercase;">Maturity</th>
+        <th style="padding:9px 14px;text-align:center;font-size:11px;text-transform:uppercase;">Priority</th>
+      </tr></thead>
+      <tbody>${scores.map((s,i)=>{
+        const m=getMat(s.pct);const p=s.pct<40?'c':s.pct<65?'h':'m';
+        const pl=p==='c'?'Critical':p==='h'?'High':'Medium';
+        return`<tr style="background:${i%2===0?'white':'var(--off)'};">
+          <td style="padding:9px 14px;border-bottom:1px solid var(--grey-m);">${s.domain.icon} ${s.domain.name}</td>
+          <td style="padding:9px 14px;border-bottom:1px solid var(--grey-m);text-align:center;font-weight:600;">${s.pct}%</td>
+          <td style="padding:9px 14px;border-bottom:1px solid var(--grey-m);text-align:center;">${m.label}</td>
+          <td style="padding:9px 14px;border-bottom:1px solid var(--grey-m);text-align:center;"><span class="pt pt-${p}">${pl}</span></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+
+  /* Top gaps */
+  if(topGaps.length>0){
+    document.getElementById('exec-top-gaps').innerHTML=`
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--navy);margin-bottom:1rem;">Priority Domains Requiring Attention</h3>
+      ${topGaps.map(s=>`
+        <div style="background:var(--off);border-left:3px solid ${barCol(s.pct)};border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:10px;">
+          <strong style="font-size:13px;color:var(--navy);">${s.domain.icon} ${s.domain.name}</strong>
+          <span style="float:right;font-size:18px;font-weight:600;color:${barCol(s.pct)};">${s.pct}%</span>
+          <p style="font-size:12.5px;color:var(--mid);margin-top:4px;line-height:1.5;clear:both;">${getMat(s.pct).desc}</p>
+        </div>`).join('')}`;
+  } else {
+    document.getElementById('exec-top-gaps').innerHTML='';
+  }
+
+  /* Immediate actions */
+  if(critActions.length>0){
+    document.getElementById('exec-immediate-actions').innerHTML=`
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:400;color:var(--navy);margin-bottom:1rem;">Key Immediate Actions</h3>
+      ${critActions.map(({domain,rec})=>`
+        <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--grey-m);">
+          <div style="flex-shrink:0;width:22px;height:22px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:2px;">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="2,5 4,7 8,3" stroke="#1FBFD7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><span style="font-size:12px;font-weight:600;color:var(--navy);">${domain.name}</span><br><span style="font-size:12.5px;color:var(--mid);">${rec.actions[0]}</span></div>
+        </div>`).join('')}`;
+  } else {
+    document.getElementById('exec-immediate-actions').innerHTML='';
+  }
+}
+
+/* ── PRINT MODES ──────────────────────────────── */
+function printMode(mode){
+  document.body.setAttribute('data-print',mode);
+  window.print();
+  setTimeout(()=>document.body.removeAttribute('data-print'),1000);
+}
+
+/* ── RESTART ──────────────────────────────────── */
+function restartTool(){
+  clearProgress();
+  ans={};orgI={};curD=0;
+  ['org-name','org-contact'].forEach(id=>document.getElementById(id).value='');
+  ['org-sector','org-size'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('org-date').value=new Date().toISOString().split('T')[0];
+  goTo('pg-landing');
+}
+
+/* ── INIT ─────────────────────────────────────── */
+document.getElementById('org-date').value=new Date().toISOString().split('T')[0];
+
+/* Restore in-progress session */
+if(loadProgress()&&Object.keys(ans).length>0){
+  if(confirm('You have an assessment in progress. Continue where you left off?')){
+    if(orgI.name){
+      document.getElementById('org-name').value=orgI.name;
+      document.getElementById('org-sector').value=orgI.sector||'';
+      document.getElementById('org-size').value=orgI.size||'';
+      document.getElementById('org-date').value=orgI.date||'';
+      document.getElementById('org-contact').value=orgI.contact||'';
+    }
+    renderDomain(curD);
+    goTo('pg-domain');
+  } else {
+    clearProgress();ans={};orgI={};curD=0;
+  }
+}
+</script>
+</body>
+</html>
