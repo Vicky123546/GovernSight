@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GovernSight™ | CCC Consultancy Group</title>
+<title>Cybersecurity Governance Diagnostic™ | CCC Consultancy Group</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
@@ -238,7 +238,7 @@ body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-
 <body>
 
 <!-- FEEDBACK BUTTON -->
-<a class="fb-btn" href="mailto:info@cccgrp.com?subject=Feedback%3A%20GovernSight&body=Hello%20CCC%20Team%2C%0A%0AThank%20you%20for%20the%20Cybersecurity%20Governance%20Diagnostic%20tool.%0A%0AMy%20feedback%3A%0A%0A[Please%20share%20your%20thoughts%20here]%0A%0AOrganisation%3A%0ARole%3A%0A%0AThank%20you." target="_blank">
+<a class="fb-btn" href="mailto:info@cccgrp.com?subject=Feedback%3A%20Cybersecurity%20Governance%20Diagnostic&body=Hello%20CCC%20Team%2C%0A%0AThank%20you%20for%20the%20Cybersecurity%20Governance%20Diagnostic%20tool.%0A%0AMy%20feedback%3A%0A%0A[Please%20share%20your%20thoughts%20here]%0A%0AOrganisation%3A%0ARole%3A%0A%0AThank%20you." target="_blank">
   <div class="fb-ico">
     <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M1 1h10v8H6.5L3 11V9H1V1z" stroke="white" stroke-width="1.4" stroke-linejoin="round"/></svg>
   </div>
@@ -256,7 +256,7 @@ body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-
     <div class="logo-sb">Advisory Diagnostic Tool</div>
   </div>
   <div class="bp">
-    <h1 class="tool-title">GovernSight<br>Diagnostic Tool<sup>™</sup></h1>
+    <h1 class="tool-title">Cybersecurity Governance<br>Diagnostic<sup>™</sup></h1>
     <p class="byline">A structured, scenario-based assessment of your organisation's cybersecurity governance maturity across six critical dimensions — informed by international best practice and leading regulatory frameworks.</p>
     <div class="sec-lbl">What to Expect</div>
     <ul class="ex-list">
@@ -304,7 +304,7 @@ body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-
     <div class="f-grp"><label class="f-lbl">Completed By</label><input type="text" class="f-inp" id="org-contact" placeholder="Name and role — e.g. Jane Doe, Head of Compliance"></div>
     <div class="row-nav">
       <button class="btn-ghost" onclick="goTo('pg-landing')">&larr; Back</button>
-      <button class="btn-solid" onclick="Begin Diagnostic()">Begin Diagnostic &rarr;</button>
+      <button class="btn-solid" onclick="startAssessment()">Start Assessment &rarr;</button>
     </div>
   </div>
 </div></div>
@@ -350,7 +350,7 @@ body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-
       <div id="exec-immediate-actions" style="margin-bottom:2rem;"></div>
       <div style="background:var(--grey);border-radius:8px;padding:1.25rem 1.5rem;margin-top:2rem;font-size:12px;color:var(--muted);line-height:1.7;">
         <strong style="color:var(--navy);">Prepared by CCC Consultancy Group Ltd</strong><br>
-        This report was generated using CCC GovernSight™, an advisory tool informed by ISO/IEC 27001:2022, NIST CSF 2.0, CIS Controls v8, DORA, and the CBN Cybersecurity Self-Assessment Tool (CSAT). It is for diagnostic and governance purposes only and does not constitute legal, regulatory or professional advice.<br>
+        This report was generated using the CCC Cybersecurity Governance Diagnostic™, an advisory tool informed by ISO/IEC 27001:2022, NIST CSF 2.0, CIS Controls v8, DORA, and the CBN Cybersecurity Self-Assessment Tool (CSAT). It is for diagnostic and governance purposes only and does not constitute legal, regulatory or professional advice.<br>
         info@cccgrp.com &nbsp;|&nbsp; +44 7407 779 079 &nbsp;|&nbsp; cccgrp.com &nbsp;|&nbsp; UK expertise. Global perspective. Local impact.
       </div>
     </div>
@@ -361,7 +361,7 @@ body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-
     <div class="res-w">
       <div class="res-hdr">
         <div class="res-tag">Assessment Complete</div>
-        <h2 class="res-ttl">GovernSight</h2>
+        <h2 class="res-ttl">Cybersecurity Governance Diagnostic</h2>
         <div class="res-org" id="res-org"></div>
       </div>
 
@@ -417,11 +417,9 @@ body{font-family:'Inter',sans-serif;background:var(--off);color:var(--char);min-
           <div class="cta-t">
             <div class="cta-ey">Ready to close the gaps?</div>
             <div class="cta-ttl">Work With CCC Consultancy Group</div>
-            <div class="cta-bd">Your assessment highlights areas that could expose your organisation to operational disruption, regulatory risk, and financial loss. 
-Our GRC advisory team works with leadership teams to translate these findings into clear, board-ready action plans and governance frameworks.
-</div></div>
+            <div class="cta-bd">Our GRC advisory team specialises in translating diagnostic findings into practical, Board-ready governance frameworks — across the UK, Nigeria and wider African markets. Book a free 15-minute discovery call or send us your report and we will be in touch.</div>
             <div class="cta-btns">
-              <a class="btn-call" href="https://calendly.com/funsokale/30-minute-discovery-call-ccc-consultancy" target="_blank">📞 Request a Call</a>
+              <a class="btn-call" href="https://calendly.com/funsokale/free-15-minute-discovery-call-ccc-consultancy" target="_blank">📞 Request a Call</a>
               <a class="btn-email-cta" id="email-cta-link" href="#" target="_blank">✉ Email Us</a>
             </div>
           </div>
@@ -443,42 +441,42 @@ Our GRC advisory team works with leadership teams to translate these findings in
    DATA
 ══════════════════════════════════════════════ */
 const DOMAINS=[
-{id:1,icon:name:'Cybersecurity Governance',
+{id:1,icon:'🏛️',name:'Cybersecurity Governance',
  desc:'Evaluates whether cybersecurity is embedded at Board and executive level, with clear ownership, documented accountability and dedicated resource allocation.',
  q:['Does your organisation have a Board-approved Cybersecurity Policy in place?',
     'Is there a designated cybersecurity lead (e.g. CISO or Head of IT Security) with defined authority and a clear reporting line?',
     'Are cybersecurity risks formally reported to senior leadership or the Board at least quarterly?',
     'Are cybersecurity roles, responsibilities and accountabilities formally documented and communicated to all relevant staff?',
     'Is there a dedicated cybersecurity budget reviewed and approved by leadership on an annual basis?']},
-{id:2,icon:name:'Risk Management Practices',
+{id:2,icon:'⚖️',name:'Risk Management Practices',
  desc:'Evaluates how cyber risk is identified, assessed, documented and actively managed within the enterprise risk framework.',
  q:['Is there a formal cyber risk assessment process conducted at least annually or following significant operational changes?',
     'Are cyber risks documented in the enterprise risk register with assigned owners and defined review cycles?',
     'Has your organisation defined a risk appetite or tolerance statement specifically for cybersecurity risk?',
     'Is there a process to monitor and track emerging cyber threats relevant to your sector and operating environment?',
     'Are residual cyber risks formally reviewed and escalated to leadership on a regular basis?']},
-{id:3,icon:name:'Technology Infrastructure Safeguards',
+{id:3,icon:'🔒',name:'Technology Infrastructure Safeguards',
  desc:'Reviews the technical controls protecting systems, data and digital assets from unauthorised access, compromise and disruption.',
  q:['Does your organisation maintain a complete, up-to-date inventory of all hardware and software assets?',
     'Are access controls enforced using the principle of least privilege, with periodic access reviews conducted?',
     'Is multi-factor authentication (MFA) deployed across critical systems and all remote access connections?',
     'Is sensitive and regulated data encrypted both at rest and in transit across your systems?',
     'Are systems, applications and devices patched and updated on a defined and enforced schedule?']},
-{id:4,icon:name:'Third-Party Risk Controls',
+{id:4,icon:'🤝',name:'Third-Party Risk Controls',
  desc:"Examines how vendor, supplier and cloud provider cyber risks are identified, assessed and managed across the organisation's extended supply chain.",
  q:['Is there a documented process for assessing the cybersecurity posture of third-party vendors before engagement?',
     'Are critical or high-risk third parties subject to formal cybersecurity due diligence prior to onboarding?',
     'Do vendor and supplier contracts include cybersecurity obligations, data protection clauses and audit rights?',
     'Is there ongoing monitoring of third-party access privileges and their evolving cyber risk exposure?',
     'Are cloud service providers and SaaS platforms included in your third-party risk review and management process?']},
-{id:5,icon:name:'Incident Response Capabilities',
+{id:5,icon:'🚨',name:'Incident Response Capabilities',
  desc:"Assesses the organisation's preparedness to detect, contain, respond to and learn from cybersecurity incidents in a structured and timely manner.",
  q:['Does your organisation have a formally documented Incident Response Plan (IRP) approved by leadership?',
     'Has the Incident Response Plan been tested — for example through a tabletop exercise — within the past 12 months?',
     'Are all relevant staff trained on their specific roles and responsibilities in the event of a cyber incident?',
     'Is there a clearly defined escalation and regulatory notification process for cyber incidents?',
     'Are cyber incidents formally logged, root-cause reviewed and used to improve controls and detection capabilities?']},
-{id:6,icon:name:'Operational Resilience',
+{id:6,icon:'🔄',name:'Operational Resilience',
  desc:"Evaluates the organisation's ability to maintain, absorb disruption to, and rapidly restore critical operations following a cyber event.",
  q:["Does your organisation have a Business Continuity Plan (BCP) that specifically addresses cyber disruption scenarios?",
     'Is there a Disaster Recovery Plan (DRP) with defined and tested Recovery Time Objectives (RTOs) and Recovery Point Objectives (RPOs)?',
